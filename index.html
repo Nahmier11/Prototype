@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Tebak Angka</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .game {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      padding: 30px;
+      border-radius: 22px;
+      text-align: center;
+      box-shadow: 0 15px 40px #00000030;
+    }
+
+    h1 {
+      color: #553c9a;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      line-height: 1.6;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 10px;
+      background: #6c4bd2;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #5135ae;
+    }
+
+    #pesan {
+      font-weight: bold;
+      min-height: 28px;
+    }
+
+    .skor {
+      margin-top: 15px;
+      color: #553c9a;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="game">
+    <h1>🎯 Tebak Angka</h1>
+    <p>
+      Aku menyimpan angka dari 1 sampai 100.
+      Bisakah kamu menebaknya?
+    </p>
+
+    <input
+      type="number"
+      id="tebakan"
+      min="1"
+      max="100"
+      placeholder="Masukkan angka 1–100"
+    >
+
+    <button onclick="cekTebakan()">Tebak!</button>
+
+    <p id="pesan" aria-live="polite">
+      Ayo mulai bermain!
+    </p>
+
+    <p class="skor" id="percobaan">
+      Jumlah tebakan: 0
+    </p>
+
+    <button onclick="mulaiLagi()">Main Lagi</button>
+  </main>
+
+  <script>
+    let angkaRahasia;
+    let jumlahTebakan = 0;
+    let selesai = false;
+
+    function mulaiLagi() {
+      angkaRahasia = Math.floor(Math.random() * 100) + 1;
+      jumlahTebakan = 0;
+      selesai = false;
+
+      document.getElementById("tebakan").value = "";
+      document.getElementById("pesan").textContent =
+        "Ayo mulai bermain!";
+      document.getElementById("percobaan").textContent =
+        "Jumlah tebakan: 0";
+    }
+
+    function cekTebakan() {
+      if (selesai) {
+        document.getElementById("pesan").textContent =
+          "Klik Main Lagi untuk bermain kembali.";
+        return;
+      }
+
+      const kolom = document.getElementById("tebakan");
+      const angka = Number(kolom.value);
+      const pesan = document.getElementById("pesan");
+
+      if (kolom.value === "" || angka < 1 ||
+          angka > 100 || !Number.isInteger(angka)) {
+        pesan.textContent = "Masukkan bilangan bulat 1–100!";
+        return;
+      }
+
+      jumlahTebakan++;
+
+      if (angka === angkaRahasia) {
+        pesan.textContent =
+          "🎉 Benar! Kamu berhasil menebaknya!";
+        selesai = true;
+      } else if (angka < angkaRahasia) {
+        pesan.textContent = "Terlalu kecil! Coba angka lebih besar.";
+      } else {
+        pesan.textContent = "Terlalu besar! Coba angka lebih kecil.";
+      }
+
+      document.getElementById("percobaan").textContent =
+        "Jumlah tebakan: " + jumlahTebakan;
+    }
+
+    document.getElementById("tebakan").addEventListener(
+      "keydown",
+      function(event) {
+        if (event.key === "Enter") {
+          cekTebakan();
+        }
+      }
+    );
+
+    mulaiLagi();
+  </script>
+</body>
+</html>
